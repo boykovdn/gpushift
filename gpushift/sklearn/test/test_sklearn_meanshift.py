@@ -47,7 +47,7 @@ def test_MeanShift(generated_data):
     """
     sample, locs = generated_data
 
-    ms = MeanShift(0.7, distance_metric='euclidean', kernel='gaussian')
+    ms = MeanShift(0.7, distance_metric='composite', kernel='gaussian')
     ms.fit(sample)
     cluster_centers = ms.cluster_centers_
 
@@ -78,9 +78,11 @@ def test_CompositeSpace(self_embedding):
     """
     _,C,H,W = self_embedding.shape
 
-    ms = MeanShiftForeground(0.32, distance_metric='euclidean', kernel='gaussian', use_keops=True)
+    ms = MeanShiftForeground(0.32, distance_metric='euclidean', kernel='gaussian', use_keops=True,
+            use_gpushift=True)
 
     self_embedding = add_XY(self_embedding[0], scale_down=0.01)
     outp_ = ms.fit_predict(self_embedding[None,:,None,:,:])
 
+    import pdb; pdb.set_trace()
     plt.imshow(outp_.reshape(H,W)); plt.show()
